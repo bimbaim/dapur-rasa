@@ -1,5 +1,4 @@
 {
-  "build": {
-    "outputDirectory": "build"
-  }
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist"
 }
