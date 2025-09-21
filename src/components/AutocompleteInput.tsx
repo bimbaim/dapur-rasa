@@ -8,6 +8,7 @@ interface AutocompleteInputProps {
   onSelect: (value: string) => void;
   query: string;
   setQuery: (value: string) => void;
+  searchType: string;
 }
 
 export function AutocompleteInput({ 
@@ -15,43 +16,74 @@ export function AutocompleteInput({
   placeholder, 
   onSelect, 
   query,
-  setQuery
+  setQuery,
+  searchType
 }: AutocompleteInputProps) {
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [allData, setAllData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  // Fetch all data on component mount
+  // Fetch initial data based on search type (for ingredient/cuisine)
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(apiEndpoint);
-        const data = await res.json();
-        const key = Object.keys(data)[0]; 
-        setAllData(data[key] || []); 
-      } catch (err) {
-        console.error("Failed to fetch autocomplete data:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [apiEndpoint]);
-
-  // Filter suggestions as user types
-  useEffect(() => {
-    if (query.length > 0) {
-      const filtered = allData.filter(item => {
-        const itemName = item.strCategory || item.strArea || item.strIngredient || "";
-        return itemName.toLowerCase().includes(query.toLowerCase());
-      });
-      setSuggestions(filtered.slice(0, 10)); 
-    } else {
-      setSuggestions([]);
+    // Only fetch for 'ingredient' and 'cuisine'
+    if (searchType === 'ingredient' || searchType === 'cuisine') {
+      const fetchData = async () => {
+        setLoading(true);
+        try {
+          const res = await fetch(apiEndpoint);
+          const data = await res.json();
+          const key = Object.keys(data)[0]; 
+          setAllData(data[key] || []); 
+        } catch (err) {
+          console.error("Failed to fetch autocomplete data:", err);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchData();
     }
-  }, [query, allData]);
+  }, [apiEndpoint, searchType]);
+
+  // Dynamic search/filter based on search type
+  useEffect(() => {
+    const fetchAndFilterSuggestions = async () => {
+      if (query.length < 2) {
+        setSuggestions([]);
+        return;
+      }
+      setLoading(true);
+
+      let filteredSuggestions: any[] = [];
+      
+      // Handle 'name' search (dynamic API call)
+      if (searchType === 'name') {
+        try {
+          const res = await fetch(`${apiEndpoint}${query}`);
+          const data = await res.json();
+          filteredSuggestions = data.meals || [];
+        } catch (err) {
+          console.error("Failed to fetch name suggestions:", err);
+        }
+      } 
+      // Handle 'ingredient' or 'cuisine' search (local filtering)
+      else {
+        filteredSuggestions = allData.filter(item => {
+          const itemName = item.strIngredient || item.strArea || "";
+          return itemName.toLowerCase().includes(query.toLowerCase());
+        });
+      }
+
+      setSuggestions(filteredSuggestions.slice(0, 10));
+      setLoading(false);
+    };
+
+    const debounceFetch = setTimeout(() => {
+      fetchAndFilterSuggestions();
+    }, 300); // Debounce to reduce API calls
+
+    return () => clearTimeout(debounceFetch);
+  }, [query, allData, apiEndpoint, searchType]);
 
   // Handle outside clicks to close suggestions
   useEffect(() => {
@@ -67,7 +99,7 @@ export function AutocompleteInput({
   }, []);
 
   const handleItemClick = (item: any) => {
-    const itemName = item.strCategory || item.strArea || item.strIngredient || "";
+    const itemName = searchType === 'name' ? item.strMeal : (item.strIngredient || item.strArea || "");
     setQuery(itemName);
     onSelect(itemName);
     setSuggestions([]);
@@ -91,7 +123,7 @@ export function AutocompleteInput({
           <CardContent className="p-0">
             <ul className="max-h-60 overflow-y-auto custom-scrollbar">
               {suggestions.map((item, index) => {
-                const itemName = item.strCategory || item.strArea || item.strIngredient || "";
+                const itemName = searchType === 'name' ? item.strMeal : (item.strIngredient || item.strArea || "");
                 return (
                   <li
                     key={index}

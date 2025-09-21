@@ -75,6 +75,7 @@ export function SearchSection({ setResults, setLoading, setError }: SearchSectio
   };
 
   const autocompleteEndpoints: { [key: string]: string } = {
+    name: "https://www.themealdb.com/api/json/v1/1/search.php?s=",
     ingredient: "https://www.themealdb.com/api/json/v1/1/list.php?i=list",
     cuisine: "https://www.themealdb.com/api/json/v1/1/list.php?a=list"
   };
@@ -134,11 +135,13 @@ export function SearchSection({ setResults, setLoading, setError }: SearchSectio
           {activeSearch && (
             <div className="flex flex-col md:flex-row gap-4">
               {activeSearch === "name" && (
-                <Input
+                <AutocompleteInput
+                  apiEndpoint={autocompleteEndpoints.name}
                   placeholder="e.g. Arrabiata"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  className="h-12 text-lg rounded-xl bg-orange-50 border-orange-200 flex-1"
+                  query={query}
+                  setQuery={setQuery}
+                  onSelect={(value) => setQuery(value)}
+                  searchType="name"
                 />
               )}
               
@@ -149,6 +152,7 @@ export function SearchSection({ setResults, setLoading, setError }: SearchSectio
                   query={query}
                   setQuery={setQuery}
                   onSelect={(value) => setQuery(value)}
+                  searchType="ingredient"
                 />
               )}
               
@@ -174,6 +178,7 @@ export function SearchSection({ setResults, setLoading, setError }: SearchSectio
                   query={query}
                   setQuery={setQuery}
                   onSelect={(value) => setQuery(value)}
+                  searchType="cuisine"
                 />
               )}
 

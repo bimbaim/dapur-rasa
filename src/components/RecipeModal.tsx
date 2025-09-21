@@ -42,16 +42,16 @@ export function RecipeModal({ recipe, onClose }: RecipeModalProps) {
                     animate={{ scale: 1, opacity: 1, y: 0 }}
                     exit={{ scale: 0.9, opacity: 0, y: 20 }}
                     transition={{ type: "spring", damping: 20, stiffness: 200 }}
-                    className="bg-orange-50 rounded-2xl shadow-2xl max-w-2xl w-full relative flex flex-col" // Changed background color
+                    className="bg-orange-50 rounded-2xl shadow-2xl max-w-2xl w-full relative flex flex-col"
                     style={{ maxHeight: '90vh' }}
                 >
-                    {/* Close button */}
+                    {/* Close button with updated styles */}
                     <button
                         onClick={onClose}
-                        className="absolute top-4 right-4 text-gray-700 hover:text-gray-900 bg-white rounded-full p-2 shadow-md z-10 transition-all duration-200 hover:scale-105"
+                        className="absolute top-4 right-4 text-white hover:text-orange-900 bg-orange-600 hover:bg-orange-700 rounded-full p-2 shadow-md z-10 transition-all duration-200 hover:scale-110 flex items-center justify-center space-x-1"
                         aria-label="Close recipe details"
                     >
-                        <X size={24} />
+                        <X size={20} className="stroke-[3px]" />
                     </button>
 
                     {/* Header image */}
@@ -102,15 +102,12 @@ export function RecipeModal({ recipe, onClose }: RecipeModalProps) {
                                 rel="noopener noreferrer"
                                 className="mt-6 inline-flex items-center justify-center px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl group"
                             >
-                                {/* YouTube Play Icon */}
                                 <svg className="w-5 h-5 mr-1 text-white group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                     <path d="M19.615 3.184c-1.042-.319-2.091-.468-3.136-.525C13.257 2.457 12 2.5 12 2.5s-1.257-.043-4.479.135C6.475 2.715 5.426 2.864 4.384 3.184c-1.127.345-2.046 1.152-2.38 2.378-.344 1.144-.467 2.368-.525 3.554C1.332 10.74 1.5 12 1.5 12s-.168 1.26-.001 2.923c.058 1.186.181 2.41.525 3.554.334 1.226 1.253 2.033 2.38 2.378 1.042.319 2.091.468 3.136.525 3.222.178 4.479.135 4.479.135s1.257.043 4.479-.135c1.042-.178 2.091-.319 3.136-.525 1.127-.345 2.046-1.152-2.38-2.378.344-1.144.467-2.368.525-3.554C22.668 13.26 22.5 12 22.5 12s.168-1.26.001-2.923c-.058-1.186-.181-2.41-.525-3.554-.334-1.226-1.253-2.033-2.38-2.378zM10 15.5V8.5L16 12l-6 3.5z" />
                                 </svg>
-                                {/* Text */}
                                 <span className="whitespace-nowrap">Watch on YouTube</span>
                             </a>
                         )}
-
                     </div>
                 </motion.div>
             </motion.div>
