@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Navigation } from './components/Navigation';
+// import { Navigation } from './components/Navigation';
 import { HeroSection } from './components/HeroSection';
 import { SearchSection } from './components/SearchSection';
 import { ResultsSection } from './components/ResultsSection';
@@ -64,7 +64,7 @@ export default function App() {
         }}
       />
       
-      <Navigation />
+      {/* <Navigation /> */}
       
       <div className="relative z-10 snap-y snap-mandatory h-screen overflow-y-scroll">
         <HeroSection />
