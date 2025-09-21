@@ -1,7 +1,7 @@
 
-  # One-Page Recipe Platform
+  # Dolmus Culina Platform
 
-  This is a code bundle for One-Page Recipe Platform. The original project is available at https://www.figma.com/design/VRnbwoBr8dI4G6Ox3qz6tP/One-Page-Recipe-Platform.
+  This is a code bundle for Dolmus Culina Platform. The original project is available at https://www.figma.com/design/VRnbwoBr8dI4G6Ox3qz6tP/One-Page-Recipe-Platform.
 
   ## Running the code
 
